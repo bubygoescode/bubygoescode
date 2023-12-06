@@ -11,9 +11,14 @@ CREATE TABLE [dbo].[BATCH_METADATA](
 	[CREATED_DTTM] [datetime] NULL,
 	[UPDATED_DTTM] [datetime] NULL,
 	[CREATED_BY] [varchar](100) NULL,
-	[UPDATED_BY] [varchar](100) NULL
+	[UPDATED_BY] [varchar](100) NULL,
+ CONSTRAINT [PK_CONNECTIONS_METADATA] PRIMARY KEY CLUSTERED 
+(
+	[BATCH_ID] ASC
+)WITH (STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
+
 /****** Object:  Table [dbo].[BATCH_RUN_STATS]    Script Date: 12/5/2023 10:16:24 PM ******/
 SET ANSI_NULLS ON
 GO
@@ -26,7 +31,11 @@ CREATE TABLE [dbo].[BATCH_RUN_STATS](
 	[BATCH_RUN_STARTDTTM] [datetime] NULL,
 	[BATCH_RUN_END_DTTM] [datetime] NULL,
 	[BATCH_STATUS] [varchar](200) NULL,
-	[BATCH_ERR_DESC] [varchar](200) NULL
+	[BATCH_ERR_DESC] [varchar](200) NULL,
+ CONSTRAINT [PK_CONNECTIONS_METADATA] PRIMARY KEY CLUSTERED 
+(
+	[BATCH_ID] ASC
+)WITH (STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
 /****** Object:  Table [dbo].[CONNECTIONS_METADATA]    Script Date: 12/5/2023 10:16:24 PM ******/
@@ -35,7 +44,7 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[CONNECTIONS_METADATA](
-	[SRC_ID] [int] NOT NULL,
+	[SRC_ID] DECIMAL(4,0) NOT NULL,
 	[SRC_SCHEMA_ID] [int] NOT NULL,
 	[SCHEMA_NAME] [varchar](255) NOT NULL,
 	[SRC_DB_TYPE] [varchar](255) NULL,
@@ -82,7 +91,7 @@ SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[OBJ_METADATA](
 	[SRC_SCHEMA_ID] [int] NOT NULL,
-	[OBJ_ID] [int] NOT NULL,
+	[OBJ_ID] DECIMAL(5,0) NOT NULL,
 	[OBJ_NAME] [varchar](200) NOT NULL,
 	[ERROR_THRESHOLD] [int] NULL,
 	[LOAD_GRP] [int] NULL,
@@ -113,8 +122,8 @@ CREATE TABLE [dbo].[OBJ_RUN_STATS](
 	[BATCH_ID] [bigint] NULL,
 	[SRC_SCHEMA_ID] [int] NULL,
 	[OBJ_ID] [int] NULL,
-	[OBJ_RUN_ID] [varchar](50) NULL,
-	[JOB_RUN_ID] [varchar](24) NULL,
+	[OBJ_RUN_ID] [DECIMAL](25,0) NULL,
+	[JOB_RUN_ID] [decimal](24, 0) NULL,
 	[SOURCE_COUNT] [bigint] NULL,
 	[TARGET_COUNT] [bigint] NULL,
 	[SRC_SIZE] [int] NULL,
@@ -301,6 +310,7 @@ IF NOT EXISTS
 	WHERE src_name=@src_name 
 	and CAST(a.BATCH_RUN_STARTDTTM as DATE) = CAST(GETDATE() as DATE)
 	AND BATCH_STATUS = 'SUCCESS'
+	AND BATCH_ID = @batch_id
 	)
 BEGIN
 	SELECT @batch_run_id = batch_run_id   FROM [dbo].[BATCH_RUN_STATS] a WITH (NOLOCK)
@@ -340,14 +350,14 @@ GO
 CREATE   PROCEDURE [dbo].[ETL_JOBRUNSTATS_IU] 
 (
 	@src_name varchar(250), @commandtype varchar(20), @src_schema_id varchar(50), @batch_run_id varchar(20), 
-	@job_run_id varchar(100) = NULL, 
+	@job_run_id varchar(24) = NULL, 
 	@msg varchar(8000) = NULL
 )
 AS 
 /* ---------------------------------
 
 RUNNING SAMPLE :
-DECLARE @src_name varchar(250), @batch_run_id varchar(20), @src_schema_id varchar(50), @commandtype varchar(20), @msg varchar(8000), @job_run_id varchar(100)
+DECLARE @src_name varchar(250), @batch_run_id varchar(20), @src_schema_id varchar(50), @commandtype varchar(20), @msg varchar(8000), @job_run_id varchar(24)
 SET @src_name = 'sqlserver_dummysrc1'
 SET @batch_run_id = '202311300958340001'
 SET @commandtype = 'I'
