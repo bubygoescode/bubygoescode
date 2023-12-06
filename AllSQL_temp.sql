@@ -1,0 +1,96 @@
+CREATE TABLE [dbo].[BATCH_METADATA] ( BATCH_ID int NULL, BATCH_NAME varchar(200) NULL, BATCH_DESC varchar(200) NULL, BATCH_FREQUENCY varchar(100) NULL, CREATED_DTTM datetime NULL, UPDATED_DTTM datetime NULL, CREATED_BY varchar(100) NULL, UPDATED_BY varchar(100) NULL );
+
+insert into [dbo].[BATCH_METADATA]
+SELECT '1001','SAPS4','Daily run SAPS4','5',GETDATE(),GETDATE(),'BUBY_UGUY@YAHOO.COM','BUBY_UGUY@YAHOO'
+
+insert into [dbo].[BATCH_METADATA]
+SELECT '1001','APAC_SQL_SERVER_BATCH_1','Daily run APAC SQL Server','5',GETDATE(),GETDATE(),'BUBY_UGUY@YAHOO.COM','BUBY_UGUY@YAHOO'
+
+
+INSERT [dbo].[BATCH_METADATA] ([BATCH_ID], [BATCH_NAME], [BATCH_DESC], [BATCH_FREQUENCY], [CREATED_DTTM], [UPDATED_DTTM], [CREATED_BY], [UPDATED_BY]) VALUES (1, N'src_bronzeraw', N'ingestion', N'daily', GETDATE(), GETDATE(), N'NAME@company.com', N'NAME@company.com')
+INSERT [dbo].[BATCH_METADATA] ([BATCH_ID], [BATCH_NAME], [BATCH_DESC], [BATCH_FREQUENCY], [CREATED_DTTM], [UPDATED_DTTM], [CREATED_BY], [UPDATED_BY]) VALUES (2, N'bronzeraw_bronze', N'ingestion', N'daily', GETDATE(), GETDATE(), N'NAME@company.com', N'NAME@company.com')
+INSERT [dbo].[BATCH_METADATA] ([BATCH_ID], [BATCH_NAME], [BATCH_DESC], [BATCH_FREQUENCY], [CREATED_DTTM], [UPDATED_DTTM], [CREATED_BY], [UPDATED_BY]) VALUES (3, N'bronze_silver', N'integration', N'daily', GETDATE(), GETDATE(), N'NAME@company.com', N'NAME@company.com')
+INSERT [dbo].[BATCH_METADATA] ([BATCH_ID], [BATCH_NAME], [BATCH_DESC], [BATCH_FREQUENCY], [CREATED_DTTM], [UPDATED_DTTM], [CREATED_BY], [UPDATED_BY]) VALUES (4, N'silver_gold', N'integration', N'daily', GETDATE(), GETDATE(), N'NAME@company.com', N'NAME@company.com')
+INSERT [dbo].[BATCH_METADATA] ([BATCH_ID], [BATCH_NAME], [BATCH_DESC], [BATCH_FREQUENCY], [CREATED_DTTM], [UPDATED_DTTM], [CREATED_BY], [UPDATED_BY]) VALUES (5, N'microbatch', N'microbatch_run', N'daily', GETDATE(), GETDATE(), N'NAME@company.com', N'NAME@company.com')
+
+CREATE TABLE [dbo].[CONNECTIONS_METADATA](
+	[SRC_ID] [int] NOT NULL,
+	[SRC_SCHEMA_ID] [int] NOT NULL,
+	[SCHEMA_NAME] [varchar](255) NOT NULL,
+	[SRC_DB_TYPE] [varchar](255) NULL,
+	[SRC_DB_NAME] [varchar](255) NOT NULL,
+	[DB_SRVR_NAME] [varchar](255) NOT NULL,
+	[PORT] [int] NULL,
+	[CONN_STRING] [varchar](1024) NULL,
+	[USER_ID] [varchar](255) NULL,
+	[PWD] [varchar](1000) NULL,
+	[NUM_CONN] [int] NULL,
+	[SRC_NAME] [varchar](255) NULL,
+	[CREATED_DTTM] [datetime] NULL,
+	[EXEC_WINDOW] [varchar](100) NULL,
+	[DESCRIPTION] [varchar](1024) NULL,
+	[ADLS_PROPERTY] [varchar](1024) NULL,
+	[CONTAINER] [varchar](200) NULL,
+ CONSTRAINT [PK_CONNECTIONS_METADATA] PRIMARY KEY CLUSTERED 
+(
+	[SRC_SCHEMA_ID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+INSERT [dbo].[CONNECTIONS_METADATA] ([SRC_ID], [SRC_SCHEMA_ID], [SCHEMA_NAME], [SRC_DB_TYPE], [SRC_DB_NAME], [DB_SRVR_NAME], [PORT], [CONN_STRING], [USER_ID], [PWD], [NUM_CONN], [SRC_NAME], [CREATED_DTTM], [EXEC_WINDOW], [DESCRIPTION], [ADLS_PROPERTY], [CONTAINER]) VALUES (1, 1001, N'dbo', N'sqlserver', N'SQLSERVER_DUMMY_DB_SRC_1', N'asm-sqlserver-source.database.windows.net', NULL, N'keyvault_SQLSERVER_DUMMMY_SRC1', N'bubyadmin', N'Qwerty2411!', 10,  N'sqlserver_dummysrc1',  GETDATE(), N'', N'', N'RESERVED_COLUMN', NULL)
+INSERT [dbo].[CONNECTIONS_METADATA] ([SRC_ID], [SRC_SCHEMA_ID], [SCHEMA_NAME], [SRC_DB_TYPE], [SRC_DB_NAME], [DB_SRVR_NAME], [PORT], [CONN_STRING], [USER_ID], [PWD], [NUM_CONN], [SRC_NAME], [CREATED_DTTM], [EXEC_WINDOW], [DESCRIPTION], [ADLS_PROPERTY], [CONTAINER]) VALUES (1, 1002, N'xyz', N'sqlserver', N'SQLSERVER_DUMMY_DB_SRC_1', N'asm-sqlserver-source.database.windows.net', NULL, N'keyvault_SQLSERVER_DUMMMY_SRC2', N'bubyadmin', N'Qwerty2411!', 10,  N'sqlserver_dummysrc1',  GETDATE(), N'', N'', N'RESERVED_COLUMN', NULL)
+INSERT [dbo].[CONNECTIONS_METADATA] ([SRC_ID], [SRC_SCHEMA_ID], [SCHEMA_NAME], [SRC_DB_TYPE], [SRC_DB_NAME], [DB_SRVR_NAME], [PORT], [CONN_STRING], [USER_ID], [PWD], [NUM_CONN], [SRC_NAME], [CREATED_DTTM], [EXEC_WINDOW], [DESCRIPTION], [ADLS_PROPERTY], [CONTAINER]) VALUES (1, 1003, N'abc', N'sqlserver', N'SQLSERVER_DUMMY_DB_SRC_1', N'asm-sqlserver-source.database.windows.net', NULL, N'keyvault_SQLSERVER_DUMMMY_SRC3', N'bubyadmin', N'Qwerty2411!', 10,  N'sqlserver_dummysrc1',  GETDATE(), N'', N'', N'RESERVED_COLUMN', NULL)
+
+
+DROP TABLE [dbo].[BATCH_RUN_STATS]
+CREATE TABLE [dbo].[BATCH_RUN_STATS] ( BATCH_RUN_ID bigint NULL, BATCH_ID bigint NULL, SRC_NAME varchar(200) NOT NULL, BATCH_RUN_STARTDTTM datetime NULL, BATCH_RUN_END_DTTM datetime NULL, BATCH_STATUS varchar(200) NULL, BATCH_ERR_DESC varchar(200) NULL );
+
+DROP TABLE  [dbo].[JOB_RUN_STATS]
+CREATE TABLE [dbo].[JOB_RUN_STATS](
+	[SRC_SCHEMA_ID] [int] NOT NULL,
+	[SRC_NAME] [varchar](100) NULL,
+	[BATCH_RUN_ID] [decimal](18, 0) NOT NULL,
+	[JOB_RUN_ID] [decimal](24, 0) NOT NULL,
+	[JOB_STATUS] [varchar](200) NULL,
+	[JOB_START_DTTM] [datetime] NULL,
+	[JOB_END_DTTM] [datetime] NULL,
+	[PIPELINE_RUN_ID] [varchar](255) NULL,
+	ERROR_DESC  [varchar](8000) NULL
+)
+
+CREATE TABLE [dbo].[OBJ_METADATA] ( [SRC_SCHEMA_ID] [int] NOT NULL, OBJ_ID int NOT NULL, OBJ_NAME varchar(200) NOT NULL, ERROR_THRESHOLD int NULL, LOAD_GRP int NULL, LOAD_TYPE varchar(255) NOT NULL, OBJ_JOB_PARAMETERS varchar(4096) NULL, SELECT_STMT varchar(max) NULL, FILTER_CONDITIONS varchar(4096) NULL, ACTIVE_FLG varchar(1) NOT NULL, INCR_COL_FILT1 varchar(255) NULL, INCR_DAYS int NULL, SPLIT_BY_COL varchar(200) NULL, MAPPERS varchar(200) NULL, HARDDELETE varchar(1) NOT NULL, CREATED_DTTM datetime NULL, UPDATED_DTTM datetime NULL, CREATED_BY varchar(255) NULL, UPDATED_BY varchar(255) NULL, PARTITION_COL varchar(200) NULL, CONTAINER varchar(200) NULL );
+INSERT INTO [dbo].[OBJ_METADATA]
+SELECT '1001', '1', 'Customer', '5', '1', 'F', '||', 'SELECT * FROM x', '0', 1, 0, 0, '', '', '', GETDATE(), GETDATE(), 'BUBY_UGUY@YAHOO.COM', 'BUBY_UGUY@YAHOO.COM', '', ''
+UNION 
+SELECT '1001', '1', 'customer_apps_2', '5', '1', 'F', '||', 'SELECT * FROM x', '0', 1, 0, 0, '', '', '', GETDATE(), GETDATE(), 'BUBY_UGUY@YAHOO.COM', 'BUBY_UGUY@YAHOO.COM', '', ''
+
+DROP TABLE [dbo].[OBJ_RUN_STATS]
+CREATE TABLE [dbo].[OBJ_RUN_STATS] ( BATCH_ID bigint NULL, SRC_SCHEMA_ID int NULL, OBJ_ID int NULL, OBJ_RUN_ID varchar(50) NULL,  JOB_RUN_ID varchar(24), SOURCE_COUNT bigint NULL, TARGET_COUNT bigint NULL, SRC_SIZE int NULL, TGT_SIZE int NULL, SRC_PATH varchar(1024) NULL, TGT_PATH varchar(1024) NULL, ERROR_DESC varchar(8000) NULL, OBJ_STATUS varchar(100) NULL, JOB_OBJ_START_DTTM datetime NULL, JOB_OBJ_END_DTTM datetime NULL,  PIPELINE_RUN_ID varchar(255) NULL );
+
+
+select * from [dbo].connections_metadata
+select * from [dbo].[BATCH_METADATA]
+select * from [dbo].[BATCH_RUN_STATS]
+select * from [dbo].[JOB_RUN_STATS]
+select * from [dbo].[OBJ_METADATA] 
+select * from [dbo].[OBJ_RUN_STATS]
+202312040554160001
+202312040554160001
+--INSERT INTO [dbo].[BATCH_RUN_STATS] SELECT 202311300955050001, 1, 'sqlserver_dummysrc1',	'2023-11-30 09:55:05.593', 	GETDATE(),	'SUCCESS', NULL
+
+delete from [BATCH_RUN_STATS] where batch_run_id = 202312040553060001
+truncate table [dbo].[BATCH_RUN_STATS]
+truncate table [dbo].[JOB_RUN_STATS]
+
+
+EXECUTE dbo.ETL_INITIATE_BATCHRUNSTATS 'sqlserver_dummysrc1',1
+EXECUTE dbo.ETL_CREATE_NEW_BATCHRUNSTATS 'sqlserver_dummysrc1',1
+EXECUTE [dbo].[ETL_GET_JOBRUNSTATS] 'sqlserver_dummysrc1', '', '202312040554160001'
+DECLARE @batch_run_id bigint
+EXECUTE dbo.ETL_BATCHRUNSTATS_IU  'sqlserver_dummysrc1', 1, 'U', @batch_run_id OUTPUT
+EXECUTE dbo.ETL_JOBRUNSTATS_IU 'sqlserver_dummysrc1', 'I', 1003, '202312040554160001'
+--EXECUTE dbo.ETL_JOBRUNSTATS_IU 'sqlserver_dummysrc1', 'U_CloseExisting', '', '202312040554160001', '', 'Closed by pipeline due to the previous run not being completed successfully.'
+
+202311281638530001
+202311300732460001
