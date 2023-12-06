@@ -2,7 +2,7 @@ CREATE PROCEDURE [dbo].[ETL_OBJRUNSTATS_IU]
 (
 	@src_name varchar(250), @commandtype varchar(20), @batch_run_id varchar(20), 
 	@job_run_id varchar(100), @src_schema_id varchar(50), @obj_id varchar(100),
-	@msg varchar(8000) = NULL
+	@msg varchar(8000) = NULL 
 )
 AS 
 /* ---------------------------------
