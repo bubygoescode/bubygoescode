@@ -25,8 +25,8 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[BATCH_RUN_STATS](
-	[BATCH_RUN_ID] [bigint] NULL,
-	[BATCH_ID] [bigint] NULL,
+	[BATCH_RUN_ID] DECIMAL(18,0) NULL,
+	[BATCH_ID] [int] NULL,
 	[SRC_NAME] [varchar](200) NOT NULL,
 	[BATCH_RUN_STARTDTTM] [datetime] NULL,
 	[BATCH_RUN_END_DTTM] [datetime] NULL,
@@ -167,7 +167,7 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE   PROCEDURE  [dbo].[ETL_BATCHRUNSTATS_IU] (@src_name varchar(250), @batch_id int, @commandtype varchar(1), @output_batch_run_id bigint OUTPUT)
+CREATE   PROCEDURE  [dbo].[ETL_BATCHRUNSTATS_IU] (@src_name varchar(250), @batch_id int, @commandtype varchar(1), @output_batch_run_id DECIMAL(18,0) OUTPUT)
 AS 
 /* ---------------------------------
 
